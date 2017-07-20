@@ -1,11 +1,11 @@
 "use strict";
-describe("Core — Lint href's matching id's", function() {
-  afterAll(function(done) {
+
+describe("Core — Lint href's matching id's", () => {
+  afterAll(() => {
     flushIframes();
-    done();
   });
 
-  it("warns if can't match a fragment identifier to an id in the document", function(done) {
+  it("warns if can't match a fragment identifier to an id in the document", async () => {
     const ops = {
       config: makeBasicConfig(),
       body:
@@ -16,20 +16,20 @@ describe("Core — Lint href's matching id's", function() {
         `,
     };
 
-    makeRSDoc(ops, function(doc) {
-      const ui = doc.defaultView.respecUI;
+    const doc = await makeRSDoc(ops);
 
-      expect(ui.getErrors()).toEqual([]);
-      expect(ui.getWarnings().length).toEqual(1);
+    const ui = doc.defaultView.respecUI;
 
-      const offender = doc.getElementById("offender");
+    expect(ui.getErrors()).toEqual([]);
+    expect(ui.getWarnings().length).toEqual(1);
 
-      expect(offender.classList.contains("respec-offending-element")).toBe(true);
-    }).then(done);
+    const offender = doc.getElementById("offender");
+
+    expect(offender.classList.contains("respec-offending-element")).toBe(true);
   });
 
-  it("does not warn if fragment identifier matches an id in the document", function(done) {
-    var ops = {
+  it("does not warn if fragment identifier matches an id in the document", async () => {
+    const ops = {
       config: makeBasicConfig(),
       body:
         makeDefaultBody() + `
@@ -51,11 +51,11 @@ describe("Core — Lint href's matching id's", function() {
         `,
     };
 
-    makeRSDoc(ops, function(doc) {
-      const ui = doc.defaultView.respecUI;
+    const doc = await makeRSDoc(ops);
 
-      expect(ui.getErrors()).toEqual([]);
-      expect(ui.getWarnings()).toEqual([]);
-    }).then(done);
+    const ui = doc.defaultView.respecUI;
+
+    expect(ui.getErrors()).toEqual([]);
+    expect(ui.getWarnings()).toEqual([]);
   });
 });
